@@ -243,35 +243,26 @@ export function AppSidebar({ isCollapsed, searchQuery = '', className }: AppSide
             <Button
               variant="ghost"
               className={cn(
-                "w-full h-10 font-normal transition-all duration-200",
-                level > 0 && !isCollapsed && "ml-4 w-[calc(100%-1rem)]",
+                "w-full justify-start h-10 px-3 font-normal transition-all duration-200",
+                level > 0 && "ml-4 w-[calc(100%-1rem)]",
                 isActive && "bg-sidebar-accent text-sidebar-accent-foreground font-medium",
                 "hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground",
-                isCollapsed ? "justify-center px-2" : "justify-start px-3"
+                isCollapsed && "justify-center px-2"
               )}
             >
-              <Icon className="h-4 w-4 shrink-0" />
-              <motion.div
-                className="flex items-center justify-between flex-1 min-w-0"
-                animate={{ 
-                  opacity: isCollapsed ? 0 : 1,
-                  width: isCollapsed ? 0 : 'auto'
-                }}
-                transition={{ duration: 0.2, delay: isCollapsed ? 0 : 0.1 }}
-              >
-                {!isCollapsed && (
-                  <>
-                    <span className="truncate ml-3">{highlightText(item.title, searchQuery)}</span>
-                    <motion.div
-                      className="ml-auto"
-                      animate={{ rotate: isOpen ? 90 : 0 }}
-                      transition={{ duration: 0.2 }}
-                    >
-                      <ChevronRight className="h-4 w-4" />
-                    </motion.div>
-                  </>
-                )}
-              </motion.div>
+              <Icon className={cn("h-4 w-4 shrink-0", !isCollapsed && "mr-3")} />
+              {!isCollapsed && (
+                <>
+                  <span className="truncate">{highlightText(item.title, searchQuery)}</span>
+                  <motion.div
+                    className="ml-auto"
+                    animate={{ rotate: isOpen ? 90 : 0 }}
+                    transition={{ duration: 0.2 }}
+                  >
+                    <ChevronRight className="h-4 w-4" />
+                  </motion.div>
+                </>
+              )}
             </Button>
           </CollapsibleTrigger>
           <CollapsibleContent className="space-y-1">
@@ -297,28 +288,19 @@ export function AppSidebar({ isCollapsed, searchQuery = '', className }: AppSide
       <NavLink
         key={item.id}
         to={item.href || '#'}
-          className={({ isActive }) =>
-            cn(
-              "flex items-center h-10 rounded-md font-normal transition-all duration-200",
-              level > 0 && !isCollapsed && "ml-4",
-              isActive 
-                ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium" 
-                : "text-sidebar-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground",
-              isCollapsed ? "justify-center px-2" : "justify-start px-3"
-            )
-          }
+        className={({ isActive }) =>
+          cn(
+            "flex items-center h-10 px-3 rounded-md font-normal transition-all duration-200",
+            level > 0 && "ml-4",
+            isActive 
+              ? "bg-sidebar-accent text-sidebar-accent-foreground font-medium" 
+              : "text-sidebar-foreground hover:bg-sidebar-accent/50 hover:text-sidebar-accent-foreground",
+            isCollapsed && "justify-center px-2"
+          )
+        }
       >
-        <Icon className="h-4 w-4 shrink-0" />
-        <motion.span
-          className="truncate ml-3"
-          animate={{ 
-            opacity: isCollapsed ? 0 : 1,
-            width: isCollapsed ? 0 : 'auto'
-          }}
-          transition={{ duration: 0.2, delay: isCollapsed ? 0 : 0.1 }}
-        >
-          {!isCollapsed && highlightText(item.title, searchQuery)}
-        </motion.span>
+        <Icon className={cn("h-4 w-4 shrink-0", !isCollapsed && "mr-3")} />
+        {!isCollapsed && <span className="truncate">{highlightText(item.title, searchQuery)}</span>}
       </NavLink>
     );
   };
@@ -326,38 +308,29 @@ export function AppSidebar({ isCollapsed, searchQuery = '', className }: AppSide
   return (
     <motion.aside
       className={cn(
-        "flex flex-col h-screen bg-gradient-sidebar border-r border-sidebar-border overflow-hidden",
+        "flex flex-col h-screen bg-gradient-sidebar border-r border-sidebar-border",
+        isCollapsed ? "w-16" : "w-64",
         className
       )}
-      animate={{ 
-        width: isCollapsed ? 64 : 256,
-      }}
+      animate={{ width: isCollapsed ? 64 : 256 }}
       transition={{ duration: 0.3, ease: "easeInOut" }}
     >
       {/* Header */}
-      <div className="flex items-center justify-center h-16 px-3 border-b border-sidebar-border">
+      <div className="flex items-center h-16 px-4 border-b border-sidebar-border">
         <motion.div
-          className="flex items-center min-w-0 w-full"
-          layout
+          className="flex items-center min-w-0"
+          animate={{ opacity: isCollapsed ? 0 : 1 }}
+          transition={{ duration: 0.2 }}
         >
-          <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center shrink-0 mx-auto">
+          <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center mr-3 shrink-0">
             <Package className="h-4 w-4 text-white" />
           </div>
-          <motion.div
-            className="min-w-0 ml-3"
-            animate={{ 
-              opacity: isCollapsed ? 0 : 1,
-              width: isCollapsed ? 0 : 'auto'
-            }}
-            transition={{ duration: 0.2, delay: isCollapsed ? 0 : 0.1 }}
-          >
-            {!isCollapsed && (
-              <>
-                <h1 className="font-semibold text-sidebar-foreground truncate">AdminPro</h1>
-                <p className="text-xs text-sidebar-foreground/60 truncate">Management System</p>
-              </>
-            )}
-          </motion.div>
+          {!isCollapsed && (
+            <div className="min-w-0">
+              <h1 className="font-semibold text-sidebar-foreground truncate">AdminPro</h1>
+              <p className="text-xs text-sidebar-foreground/60 truncate">Management System</p>
+            </div>
+          )}
         </motion.div>
       </div>
 
@@ -375,14 +348,11 @@ export function AppSidebar({ isCollapsed, searchQuery = '', className }: AppSide
       </ScrollArea>
 
       {/* Footer */}
-      <div className="p-3 border-t border-sidebar-border">
+      <div className="p-4 border-t border-sidebar-border">
         <motion.div
           className="text-xs text-sidebar-foreground/60 text-center"
-          animate={{ 
-            opacity: isCollapsed ? 0 : 1,
-            height: isCollapsed ? 0 : 'auto'
-          }}
-          transition={{ duration: 0.2, delay: isCollapsed ? 0 : 0.1 }}
+          animate={{ opacity: isCollapsed ? 0 : 1 }}
+          transition={{ duration: 0.2 }}
         >
           {!isCollapsed && "© 2024 AdminPro"}
         </motion.div>
