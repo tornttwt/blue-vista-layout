@@ -24,6 +24,20 @@ import {
   UserCheck,
   Truck,
   TrendingUp,
+  Menu,
+  Clock,
+  MapPin,
+  CalendarPlus,
+  CheckCircle,
+  Timer,
+  Grid,
+  Building,
+  User,
+  Car,
+  Route,
+  Bot,
+  MessageSquare,
+  CarIcon,
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -41,98 +55,80 @@ interface MenuItem {
 const menuItems: MenuItem[] = [
   {
     id: 'dashboard',
-    title: 'Dashboard',
+    title: 'DASHBOARD',
     icon: Home,
     href: '/',
   },
   {
-    id: 'analytics',
-    title: 'Analytics',
-    icon: BarChart3,
+    id: 'mainmenu',
+    title: 'MAIN MENU',
+    icon: Menu,
     children: [
-      { id: 'overview', title: 'Overview', icon: TrendingUp, href: '/analytics/overview' },
-      { id: 'reports', title: 'Reports', icon: FileText, href: '/analytics/reports' },
-      { id: 'insights', title: 'Insights', icon: Zap, href: '/analytics/insights' },
+      { id: 'tracking-history', title: 'Tracking history', icon: Clock, href: '/mainmenu/tracking-history' },
+      { id: 'tracking-manual', title: 'Tracking manual', icon: MapPin, href: '/mainmenu/tracking-manual' },
+      { id: 'calendar', title: 'Calendar', icon: Calendar, href: '/mainmenu/calendar' },
+      { id: 'reserve', title: 'Reserve', icon: CalendarPlus, href: '/mainmenu/reserve' },
+      { id: 'approved-reserve', title: 'Approved reserve', icon: CheckCircle, href: '/mainmenu/approved-reserve' },
+      { id: 'reserve-setting', title: 'Reserve setting', icon: Settings, href: '/mainmenu/reserve-setting' },
+      { id: 'shift', title: 'Shift', icon: Clock, href: '/mainmenu/shift' },
+      { id: 'adjust-time', title: 'Adjust time', icon: Timer, href: '/mainmenu/adjust-time' },
     ],
   },
   {
-    id: 'users',
-    title: 'User Management',
-    icon: Users,
+    id: 'rpa',
+    title: 'RPA',
+    icon: Bot,
     children: [
-      { id: 'all-users', title: 'All Users', icon: Users, href: '/users' },
-      { id: 'permissions', title: 'Permissions', icon: Shield, href: '/users/permissions' },
-      { id: 'roles', title: 'Roles', icon: UserCheck, href: '/users/roles' },
+      { id: 'rpa', title: 'Rpa', icon: Bot, href: '/rpa/rpa' },
+      { id: 'arrange', title: 'Arrange', icon: Grid, href: '/rpa/arrange' },
     ],
   },
   {
-    id: 'products',
-    title: 'Products',
-    icon: Package,
-    children: [
-      { id: 'catalog', title: 'Catalog', icon: Package, href: '/products/catalog' },
-      { id: 'inventory', title: 'Inventory', icon: Database, href: '/products/inventory' },
-      { id: 'shipping', title: 'Shipping', icon: Truck, href: '/products/shipping' },
-    ],
-  },
-  {
-    id: 'finance',
-    title: 'Finance',
-    icon: CreditCard,
-    children: [
-      { id: 'payments', title: 'Payments', icon: CreditCard, href: '/finance/payments' },
-      { id: 'billing', title: 'Billing', icon: FileText, href: '/finance/billing' },
-      { id: 'invoices', title: 'Invoices', icon: FileText, href: '/finance/invoices' },
-    ],
-  },
-  {
-    id: 'marketing',
-    title: 'Marketing',
-    icon: Globe,
-    children: [
-      { id: 'campaigns', title: 'Campaigns', icon: Mail, href: '/marketing/campaigns' },
-      { id: 'analytics', title: 'Analytics', icon: BarChart3, href: '/marketing/analytics' },
-      { id: 'automation', title: 'Automation', icon: Zap, href: '/marketing/automation' },
-    ],
-  },
-  {
-    id: 'content',
-    title: 'Content Management',
+    id: 'report',
+    title: 'REPORT',
     icon: FileText,
     children: [
-      { id: 'pages', title: 'Pages', icon: FileText, href: '/content/pages' },
-      { id: 'media', title: 'Media Library', icon: Layers, href: '/content/media' },
-      { id: 'templates', title: 'Templates', icon: Monitor, href: '/content/templates' },
+      { id: 'reserve-summary', title: 'Reserve summary', icon: FileText, href: '/report/reserve-summary' },
+      { id: 'attendance', title: 'Attendance', icon: Users, href: '/report/attendance' },
+      { id: 'comment-feedback', title: 'Comment feedback', icon: MessageSquare, href: '/report/comment-feedback' },
     ],
   },
   {
-    id: 'organization',
-    title: 'Organization',
-    icon: Building2,
-    children: [
-      { id: 'departments', title: 'Departments', icon: Building2, href: '/organization/departments' },
-      { id: 'calendar', title: 'Calendar', icon: Calendar, href: '/organization/calendar' },
-      { id: 'communication', title: 'Communication', icon: Mail, href: '/organization/communication' },
-    ],
-  },
-  {
-    id: 'settings',
-    title: 'Settings',
+    id: 'configuration',
+    title: 'Configuration',
     icon: Settings,
     children: [
-      { id: 'general', title: 'General', icon: Settings, href: '/settings/general' },
-      { id: 'security', title: 'Security', icon: Shield, href: '/settings/security' },
-      { id: 'integrations', title: 'Integrations', icon: Zap, href: '/settings/integrations' },
+      { id: 'employee', title: 'Employee', icon: Users, href: '/configuration/employee' },
+      { id: 'configuration', title: 'Configuration', icon: Settings, href: '/configuration/configuration' },
+      { id: 'zone', title: 'Zone', icon: MapPin, href: '/configuration/zone' },
+      { id: 'route-zone', title: 'Route zone', icon: Route, href: '/configuration/route-zone' },
+      { id: 'route', title: 'Route', icon: Route, href: '/configuration/route' },
     ],
   },
   {
-    id: 'help',
-    title: 'Help & Support',
-    icon: HelpCircle,
+    id: 'vender-setting',
+    title: 'VENDER SETTING',
+    icon: Building2,
     children: [
-      { id: 'documentation', title: 'Documentation', icon: FileText, href: '/help/docs' },
-      { id: 'support', title: 'Support Tickets', icon: HelpCircle, href: '/help/support' },
-      { id: 'community', title: 'Community', icon: Users, href: '/help/community' },
+      { id: 'vender', title: 'Vender', icon: Building2, href: '/vender-setting/vender' },
+      { id: 'driver', title: 'Driver', icon: User, href: '/vender-setting/driver' },
+      { id: 'vehicle', title: 'Vehicle', icon: Car, href: '/vender-setting/vehicle' },
+      { id: 'vehicle-type', title: 'Vehicle type', icon: Car, href: '/vender-setting/vehicle-type' },
+    ],
+  },
+  {
+    id: 'setting',
+    title: 'SETTING',
+    icon: Settings,
+    children: [
+      { id: 'company', title: 'Company', icon: Building, href: '/setting/company' },
+      { id: 'organization', title: 'Organization', icon: Building2, href: '/setting/organization' },
+      { id: 'employee-type', title: 'Employee type', icon: UserCheck, href: '/setting/employee-type' },
+      { id: 'employee-level', title: 'Employee level', icon: UserCheck, href: '/setting/employee-level' },
+      { id: 'permission', title: 'Permission', icon: Shield, href: '/setting/permission' },
+      { id: 'module', title: 'Module', icon: Package, href: '/setting/module' },
+      { id: 'menu-passenger', title: 'Menu passenger', icon: Menu, href: '/setting/menu-passenger' },
+      { id: 'coordinator', title: 'Coordinator', icon: Users, href: '/setting/coordinator' },
     ],
   },
 ];
@@ -323,12 +319,12 @@ export function AppSidebar({ isCollapsed, searchQuery = '', className }: AppSide
           transition={{ duration: 0.2 }}
         >
           <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center mr-3 shrink-0">
-            <Package className="h-4 w-4 text-white" />
+            <CarIcon className="h-4 w-4 text-white" />
           </div>
           {!isCollapsed && (
             <div className="min-w-0">
-              <h1 className="font-semibold text-sidebar-foreground truncate">AdminPro</h1>
-              <p className="text-xs text-sidebar-foreground/60 truncate">Management System</p>
+              <h1 className="font-semibold text-sidebar-foreground truncate">TOGETA MOVE</h1>
+              <p className="text-xs text-sidebar-foreground/60 truncate">Reservation System</p>
             </div>
           )}
         </motion.div>

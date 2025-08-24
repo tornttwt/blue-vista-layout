@@ -51,7 +51,7 @@ const languages = [
 export function AppNavbar({ isCollapsed, onToggleSidebar, isMobile = false, searchQuery, onSearchChange, className }: AppNavbarProps) {
   const [selectedLanguage, setSelectedLanguage] = useState(languages[0]);
   const currentMenuTitle = useCurrentMenuTitle();
-  const customerName = "Acme Corporation"; // This would come from your auth/state management
+  const customerName = "Toyota Mortor Asia (TMA)"; // This would come from your auth/state management
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
