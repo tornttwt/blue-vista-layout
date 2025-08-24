@@ -1,16 +1,5 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import {
-  Search,
-  Menu,
-  X,
-  Globe,
-  Bell,
-  Settings,
-  User,
-  LogOut,
-  ChevronDown,
-} from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -29,15 +18,58 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { useCurrentMenuTitle } from './AppSidebar';
+import {
+    ChevronDown,
+    ChevronRight,
+    Home,
+    Settings,
+    Users,
+    BarChart3,
+    FileText,
+    Calendar,
+    Mail,
+    HelpCircle,
+    Package,
+    CreditCard,
+    Shield,
+    Database,
+    Zap,
+    Globe,
+    Layers,
+    Monitor,
+    Building2,
+    UserCheck,
+    Truck,
+    TrendingUp,
+    Menu,
+    Clock,
+    MapPin,
+    CalendarPlus,
+    CheckCircle,
+    Timer,
+    Grid,
+    Building,
+    User,
+    Car,
+    Route,
+    Bot,
+    MessageSquare,
+    CarIcon,
+    Search,
+    Bell,
+    LogOut,
+  } from 'lucide-react';
 
 interface AppNavbarProps {
-  isCollapsed: boolean;
-  onToggleSidebar: () => void;
-  isMobile?: boolean;
-  searchQuery: string;
-  onSearchChange: (query: string) => void;
-  className?: string;
-}
+    isCollapsed: boolean;
+    onToggleSidebar: () => void;
+    isMobile?: boolean;
+    searchQuery: string;
+    onSearchChange: (query: string) => void;
+    activeMainMenu: string;               // ✅ main menu ที่เลือก
+    onMainMenuChange: (id: string) => void; // ✅ callback เวลาเปลี่ยน main menu
+    className?: string;
+  }
 
 const languages = [
   { code: 'en', name: 'English', flag: '🇺🇸' },
@@ -48,75 +80,149 @@ const languages = [
   { code: 'ja', name: '日本語', flag: '🇯🇵' },
 ];
 
-export function AppNavbar({ isCollapsed, onToggleSidebar, isMobile = false, searchQuery, onSearchChange, className }: AppNavbarProps) {
-  const [selectedLanguage, setSelectedLanguage] = useState(languages[0]);
-  const currentMenuTitle = useCurrentMenuTitle();
-  const customerName = "Toyota Mortor Asia (TMA)"; // This would come from your auth/state management
+interface MenuItem { id: string; title: string; icon: React.ComponentType<any>; href?: string; children?: MenuItem[]; }
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Search is handled in real-time via onSearchChange
-  };
+const menuItems: MenuItem[] = [
+    {
+      id: 'dashboard',
+      title: 'DASHBOARD',
+      icon: Home,
+      href: '/',
+    },
+    {
+      id: 'mainmenu',
+      title: 'MAIN MENU',
+      icon: Menu,
+      children: [
+        { id: 'tracking-history', title: 'Tracking history', icon: Clock, href: '/mainmenu/tracking-history' },
+        { id: 'tracking-manual', title: 'Tracking manual', icon: MapPin, href: '/mainmenu/tracking-manual' },
+        { id: 'calendar', title: 'Calendar', icon: Calendar, href: '/mainmenu/calendar' },
+        { id: 'reserve', title: 'Reserve', icon: CalendarPlus, href: '/mainmenu/reserve' },
+        { id: 'approved-reserve', title: 'Approved reserve', icon: CheckCircle, href: '/mainmenu/approved-reserve' },
+        { id: 'reserve-setting', title: 'Reserve setting', icon: Settings, href: '/mainmenu/reserve-setting' },
+        { id: 'shift', title: 'Shift', icon: Clock, href: '/mainmenu/shift' },
+        { id: 'adjust-time', title: 'Adjust time', icon: Timer, href: '/mainmenu/adjust-time' },
+      ],
+    },
+    {
+      id: 'rpa',
+      title: 'RPA',
+      icon: Bot,
+      children: [
+        { id: 'rpa', title: 'Rpa', icon: Bot, href: '/rpa/rpa' },
+        { id: 'arrange', title: 'Arrange', icon: Grid, href: '/rpa/arrange' },
+      ],
+    },
+    {
+      id: 'report',
+      title: 'REPORT',
+      icon: FileText,
+      children: [
+        { id: 'reserve-summary', title: 'Reserve summary', icon: FileText, href: '/report/reserve-summary' },
+        { id: 'attendance', title: 'Attendance', icon: Users, href: '/report/attendance' },
+        { id: 'comment-feedback', title: 'Comment feedback', icon: MessageSquare, href: '/report/comment-feedback' },
+      ],
+    },
+    {
+      id: 'configuration',
+      title: 'Configuration',
+      icon: Settings,
+      children: [
+        { id: 'employee', title: 'Employee', icon: Users, href: '/configuration/employee' },
+        { id: 'configuration', title: 'Configuration', icon: Settings, href: '/configuration/configuration' },
+        { id: 'zone', title: 'Zone', icon: MapPin, href: '/configuration/zone' },
+        { id: 'route-zone', title: 'Route zone', icon: Route, href: '/configuration/route-zone' },
+        { id: 'route', title: 'Route', icon: Route, href: '/configuration/route' },
+      ],
+    },
+    {
+      id: 'vender-setting',
+      title: 'VENDER SETTING',
+      icon: Building2,
+      children: [
+        { id: 'vender', title: 'Vender', icon: Building2, href: '/vender-setting/vender' },
+        { id: 'driver', title: 'Driver', icon: User, href: '/vender-setting/driver' },
+        { id: 'vehicle', title: 'Vehicle', icon: Car, href: '/vender-setting/vehicle' },
+        { id: 'vehicle-type', title: 'Vehicle type', icon: Car, href: '/vender-setting/vehicle-type' },
+      ],
+    },
+    {
+      id: 'setting',
+      title: 'SETTING',
+      icon: Settings,
+      children: [
+        { id: 'company', title: 'Company', icon: Building, href: '/setting/company' },
+        { id: 'organization', title: 'Organization', icon: Building2, href: '/setting/organization' },
+        { id: 'employee-type', title: 'Employee type', icon: UserCheck, href: '/setting/employee-type' },
+        { id: 'employee-level', title: 'Employee level', icon: UserCheck, href: '/setting/employee-level' },
+        { id: 'permission', title: 'Permission', icon: Shield, href: '/setting/permission' },
+        { id: 'module', title: 'Module', icon: Package, href: '/setting/module' },
+        { id: 'menu-passenger', title: 'Menu passenger', icon: Menu, href: '/setting/menu-passenger' },
+        { id: 'coordinator', title: 'Coordinator', icon: Users, href: '/setting/coordinator' },
+      ],
+    },
+  ];
 
-  return (
-    <motion.header
-      className={cn(
-        "flex items-center justify-between h-16 px-4 bg-navbar border-b border-navbar-border",
-        "sticky top-0 z-40 backdrop-blur-sm bg-navbar/95",
-        className
-      )}
-      initial={{ y: -64 }}
-      animate={{ y: 0 }}
-      transition={{ duration: 0.3 }}
-    >
-      {/* Left Section */}
-      <div className="flex items-center gap-4 min-w-0 flex-1">
-        {/* Sidebar Toggle */}
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={onToggleSidebar}
-          className="text-navbar-foreground hover:bg-muted/50"
-        >
-          <motion.div
-            animate={{ rotate: isCollapsed ? 0 : 180 }}
-            transition={{ duration: 0.2 }}
-          >
-            {isMobile ? <Menu className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </motion.div>
-        </Button>
-
-        {/* Current Menu & Customer Name */}
-        <div className="flex items-center gap-2 min-w-0">
-          <div className="hidden sm:flex flex-col min-w-0">
-            <h1 className="text-sm font-semibold text-navbar-foreground truncate">
-              {currentMenuTitle}
-            </h1>
-            <p className="text-xs text-navbar-foreground/60 truncate">
-              {customerName}
-            </p>
-          </div>
-          <div className="sm:hidden">
-            <h1 className="text-sm font-semibold text-navbar-foreground truncate">
-              {currentMenuTitle}
-            </h1>
-          </div>
+export function AppNavbar({
+    isCollapsed,
+    onToggleSidebar,
+    isMobile = false,
+    searchQuery,
+    onSearchChange,
+    activeMainMenu,
+    onMainMenuChange,
+    className
+  }: AppNavbarProps) {
+    const [selectedLanguage, setSelectedLanguage] = useState(languages[0]);
+    const customerName = "Toyota Motor Asia (TMA)";
+  
+    const handleSearch = (e: React.FormEvent) => e.preventDefault();
+  
+    // ✅ แสดง main menu items ที่มี children เท่านั้น
+    const mainMenus = menuItems.filter(item => item.children);
+  
+    return (
+      <motion.header
+        className={cn(
+          "flex items-center justify-between h-16 px-4 bg-navbar border-b border-navbar-border",
+          "sticky top-0 z-40 backdrop-blur-sm bg-navbar/95",
+          className
+        )}
+      >
+        {/* Left Section */}
+        <div className="flex items-center gap-4 min-w-0">
+          <Button variant="ghost" size="sm" onClick={onToggleSidebar}>
+            <Menu className="h-5 w-5" />
+          </Button>
+  
+          {/* ✅ Main Menu Items */}
+          <nav className="hidden md:flex gap-4">
+            {mainMenus.map(menu => (
+              <Button
+                key={menu.id}
+                variant={activeMainMenu === menu.id ? "default" : "ghost"}
+                size="sm"
+                onClick={() => onMainMenuChange(menu.id)}
+              >
+                {menu.title}
+              </Button>
+            ))}
+          </nav>
         </div>
-      </div>
-
-      {/* Center Section - Search */}
-      <div className="flex-1 max-w-md mx-4 hidden md:block">
-        <form onSubmit={handleSearch} className="relative">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Search menus, features..."
-            value={searchQuery}
-            onChange={(e) => onSearchChange(e.target.value)}
-            className="pl-10 bg-muted/50 border-border/50 focus:bg-background transition-colors"
-          />
-        </form>
-      </div>
+  
+        {/* Center Search */}
+        <div className="flex-1 max-w-md mx-4 hidden md:block">
+          <form onSubmit={handleSearch} className="relative">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+            <Input
+              type="search"
+              placeholder="Search menus..."
+              value={searchQuery}
+              onChange={(e) => onSearchChange(e.target.value)}
+              className="pl-10"
+            />
+          </form>
+        </div>
 
       {/* Right Section */}
       <div className="flex items-center gap-2">
