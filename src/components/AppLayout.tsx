@@ -16,6 +16,7 @@ interface AppLayoutProps {
 export function AppLayout({ children, className }: AppLayoutProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const isMobile = useIsMobile();
 
   // Auto-collapse sidebar on mobile
@@ -41,13 +42,14 @@ export function AppLayout({ children, className }: AppLayoutProps) {
   };
 
   return (
-    <div className={cn("min-h-screen bg-background flex flex-col", className)}>
-      <div className="flex flex-1 relative">
+    <div className={cn("h-screen bg-background flex flex-col", className)}>
+      <div className="flex flex-1 relative overflow-hidden">
         {/* Desktop Sidebar */}
         {!isMobile && (
           <AppSidebar
             isCollapsed={isCollapsed}
-            className="shrink-0 hidden md:flex"
+            searchQuery={searchQuery}
+            className="shrink-0 hidden md:flex h-full"
           />
         )}
 
@@ -75,6 +77,7 @@ export function AppLayout({ children, className }: AppLayoutProps) {
                 <div className="relative h-full">
                   <AppSidebar
                     isCollapsed={false}
+                    searchQuery={searchQuery}
                     className="h-full shadow-xl"
                   />
                   
@@ -100,6 +103,8 @@ export function AppLayout({ children, className }: AppLayoutProps) {
             isCollapsed={isCollapsed}
             onToggleSidebar={toggleSidebar}
             isMobile={isMobile}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
           />
 
           {/* Page Content */}

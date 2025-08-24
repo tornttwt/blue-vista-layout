@@ -139,10 +139,11 @@ const menuItems: MenuItem[] = [
 
 interface AppSidebarProps {
   isCollapsed: boolean;
+  searchQuery?: string;
   className?: string;
 }
 
-export function AppSidebar({ isCollapsed, className }: AppSidebarProps) {
+export function AppSidebar({ isCollapsed, searchQuery = '', className }: AppSidebarProps) {
   const location = useLocation();
   const [openGroups, setOpenGroups] = useState<string[]>(['dashboard']);
 
@@ -173,8 +174,45 @@ export function AppSidebar({ isCollapsed, className }: AppSidebarProps) {
     return 'Dashboard';
   };
 
+  // Filter menu items based on search query
+  const filterMenuItem = (item: MenuItem): MenuItem | null => {
+    const matchesSearch = searchQuery === '' || 
+      item.title.toLowerCase().includes(searchQuery.toLowerCase());
+    
+    if (item.children) {
+      const filteredChildren = item.children
+        .map(child => filterMenuItem(child))
+        .filter(Boolean) as MenuItem[];
+      
+      if (matchesSearch || filteredChildren.length > 0) {
+        return { ...item, children: filteredChildren };
+      }
+      return null;
+    }
+    
+    return matchesSearch ? item : null;
+  };
+
+  const filteredMenuItems = menuItems
+    .map(item => filterMenuItem(item))
+    .filter(Boolean) as MenuItem[];
+
+  // Highlight matching text
+  const highlightText = (text: string, query: string) => {
+    if (!query) return text;
+    
+    const parts = text.split(new RegExp(`(${query})`, 'gi'));
+    return parts.map((part, index) => 
+      part.toLowerCase() === query.toLowerCase() ? (
+        <mark key={index} className="bg-primary/20 text-primary font-medium rounded px-1">
+          {part}
+        </mark>
+      ) : part
+    );
+  };
+
   React.useEffect(() => {
-    // Auto-expand groups that contain the active route
+    // Auto-expand groups that contain the active route or search results
     for (const item of menuItems) {
       if (item.children && item.children.some(child => child.href && location.pathname === child.href)) {
         if (!openGroups.includes(item.id)) {
@@ -182,7 +220,15 @@ export function AppSidebar({ isCollapsed, className }: AppSidebarProps) {
         }
       }
     }
-  }, [location.pathname, openGroups]);
+    
+    // Auto-expand groups when searching
+    if (searchQuery) {
+      const groupsToExpand = filteredMenuItems
+        .filter(item => item.children && item.children.length > 0)
+        .map(item => item.id);
+      setOpenGroups(prev => [...new Set([...prev, ...groupsToExpand])]);
+    }
+  }, [location.pathname, openGroups, searchQuery, filteredMenuItems]);
 
   const renderMenuItem = (item: MenuItem, level = 0) => {
     const hasChildren = item.children && item.children.length > 0;
@@ -207,7 +253,7 @@ export function AppSidebar({ isCollapsed, className }: AppSidebarProps) {
               <Icon className={cn("h-4 w-4 shrink-0", !isCollapsed && "mr-3")} />
               {!isCollapsed && (
                 <>
-                  <span className="truncate">{item.title}</span>
+                  <span className="truncate">{highlightText(item.title, searchQuery)}</span>
                   <motion.div
                     className="ml-auto"
                     animate={{ rotate: isOpen ? 90 : 0 }}
@@ -254,7 +300,7 @@ export function AppSidebar({ isCollapsed, className }: AppSidebarProps) {
         }
       >
         <Icon className={cn("h-4 w-4 shrink-0", !isCollapsed && "mr-3")} />
-        {!isCollapsed && <span className="truncate">{item.title}</span>}
+        {!isCollapsed && <span className="truncate">{highlightText(item.title, searchQuery)}</span>}
       </NavLink>
     );
   };
@@ -262,7 +308,7 @@ export function AppSidebar({ isCollapsed, className }: AppSidebarProps) {
   return (
     <motion.aside
       className={cn(
-        "flex flex-col h-full bg-gradient-sidebar border-r border-sidebar-border",
+        "flex flex-col h-screen bg-gradient-sidebar border-r border-sidebar-border",
         isCollapsed ? "w-16" : "w-64",
         className
       )}
@@ -289,9 +335,15 @@ export function AppSidebar({ isCollapsed, className }: AppSidebarProps) {
       </div>
 
       {/* Navigation */}
-      <ScrollArea className="flex-1 px-3 py-4">
+      <ScrollArea className="flex-1 px-3 py-4 overflow-y-auto">
         <nav className="space-y-1">
-          {menuItems.map(item => renderMenuItem(item))}
+          {searchQuery && filteredMenuItems.length === 0 ? (
+            <div className="px-3 py-8 text-center text-sidebar-foreground/60">
+              <p className="text-sm">No results found for "{searchQuery}"</p>
+            </div>
+          ) : (
+            (searchQuery ? filteredMenuItems : menuItems).map(item => renderMenuItem(item))
+          )}
         </nav>
       </ScrollArea>
 

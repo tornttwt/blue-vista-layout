@@ -34,6 +34,8 @@ interface AppNavbarProps {
   isCollapsed: boolean;
   onToggleSidebar: () => void;
   isMobile?: boolean;
+  searchQuery: string;
+  onSearchChange: (query: string) => void;
   className?: string;
 }
 
@@ -46,18 +48,14 @@ const languages = [
   { code: 'ja', name: '日本語', flag: '🇯🇵' },
 ];
 
-export function AppNavbar({ isCollapsed, onToggleSidebar, isMobile = false, className }: AppNavbarProps) {
-  const [searchQuery, setSearchQuery] = useState('');
+export function AppNavbar({ isCollapsed, onToggleSidebar, isMobile = false, searchQuery, onSearchChange, className }: AppNavbarProps) {
   const [selectedLanguage, setSelectedLanguage] = useState(languages[0]);
   const currentMenuTitle = useCurrentMenuTitle();
   const customerName = "Acme Corporation"; // This would come from your auth/state management
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (searchQuery.trim()) {
-      console.log('Searching for:', searchQuery);
-      // Implement search functionality here
-    }
+    // Search is handled in real-time via onSearchChange
   };
 
   return (
@@ -114,7 +112,7 @@ export function AppNavbar({ isCollapsed, onToggleSidebar, isMobile = false, clas
             type="search"
             placeholder="Search menus, features..."
             value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
+            onChange={(e) => onSearchChange(e.target.value)}
             className="pl-10 bg-muted/50 border-border/50 focus:bg-background transition-colors"
           />
         </form>
@@ -137,7 +135,7 @@ export function AppNavbar({ isCollapsed, onToggleSidebar, isMobile = false, clas
                   type="search"
                   placeholder="Search menus, features..."
                   value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onChange={(e) => onSearchChange(e.target.value)}
                   className="pl-10"
                   autoFocus
                 />
