@@ -350,7 +350,7 @@ export function AppSidebar({ isCollapsed, searchQuery = '', className }: AppSide
           animate={{ opacity: isCollapsed ? 0 : 1 }}
           transition={{ duration: 0.2 }}
         >
-          {!isCollapsed && "© 2024 AdminPro"}
+          {!isCollapsed && "© 2025 TT Techno-Park"}
         </motion.div>
       </div>
     </motion.aside>
