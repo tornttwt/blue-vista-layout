@@ -96,7 +96,7 @@ const menuItems: MenuItem[] = [
   },
   {
     id: 'configuration',
-    title: 'Configuration',
+    title: 'CONFIGURATION',
     icon: Settings,
     children: [
       { id: 'employee', title: 'Employee', icon: Users, href: '/configuration/employee' },
@@ -168,9 +168,10 @@ export function AppSidebar({
         {/* Header */}
         <div className="flex items-center h-16 px-4 border-b border-sidebar-border">
           {!isCollapsed && (
-            <h1 className="font-semibold text-sidebar-foreground truncate">
-              {mainMenu?.title || "Menu"}
-            </h1>
+            <div className="min-w-0">
+            <h1 className="font-semibold text-sidebar-foreground truncate">TOGETA MOVE</h1>
+            <p className="text-xs text-sidebar-foreground/60 truncate">Reservation System</p>
+          </div>
           )}
         </div>
   

@@ -125,7 +125,7 @@ const menuItems: MenuItem[] = [
     },
     {
       id: 'configuration',
-      title: 'Configuration',
+      title: 'CONFIGURATION',
       icon: Settings,
       children: [
         { id: 'employee', title: 'Employee', icon: Users, href: '/configuration/employee' },
@@ -195,8 +195,12 @@ export function AppNavbar({
             <Menu className="h-5 w-5" />
           </Button>
   
-          {/* ✅ Main Menu Items */}
-          <nav className="hidden md:flex gap-4">
+          
+        </div>
+  
+        {/* Center Search */}
+        {/* ✅ Main Menu Items */}
+        <nav className="hidden md:flex gap-4">
             {mainMenus.map(menu => (
               <Button
                 key={menu.id}
@@ -208,26 +212,11 @@ export function AppNavbar({
               </Button>
             ))}
           </nav>
-        </div>
-  
-        {/* Center Search */}
-        <div className="flex-1 max-w-md mx-4 hidden md:block">
-          <form onSubmit={handleSearch} className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Search menus..."
-              value={searchQuery}
-              onChange={(e) => onSearchChange(e.target.value)}
-              className="pl-10"
-            />
-          </form>
-        </div>
 
       {/* Right Section */}
       <div className="flex items-center gap-2">
         {/* Mobile Search */}
-        <div className="md:hidden">
+        {/* <div className="md:hidden">
           <Popover>
             <PopoverTrigger asChild>
               <Button variant="ghost" size="sm" className="text-navbar-foreground">
@@ -248,7 +237,7 @@ export function AppNavbar({
               </form>
             </PopoverContent>
           </Popover>
-        </div>
+        </div> */}
 
         {/* Language Switcher */}
         <DropdownMenu>
@@ -279,12 +268,12 @@ export function AppNavbar({
         </DropdownMenu>
 
         {/* Notifications */}
-        <Button variant="ghost" size="sm" className="text-navbar-foreground relative">
+        {/* <Button variant="ghost" size="sm" className="text-navbar-foreground relative">
           <Bell className="h-4 w-4" />
           <span className="absolute -top-1 -right-1 h-3 w-3 bg-primary rounded-full text-[10px] text-primary-foreground flex items-center justify-center">
             3
           </span>
-        </Button>
+        </Button> */}
 
         {/* User Menu */}
         <DropdownMenu>
