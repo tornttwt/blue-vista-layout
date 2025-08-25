@@ -95,7 +95,7 @@ const menuItems: MenuItem[] = [
   },
   {
     id: 'configuration',
-    title: 'Configuration',
+    title: 'CONFIGURATION',
     icon: Settings,
     children: [
       { id: 'employee', title: 'Employee', icon: Users, href: '/configuration/employee' },

@@ -41,11 +41,7 @@ interface AppNavbarProps {
 
 const languages = [
   { code: 'en', name: 'English', flag: '🇺🇸' },
-  { code: 'es', name: 'Español', flag: '🇪🇸' },
-  { code: 'fr', name: 'Français', flag: '🇫🇷' },
-  { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
-  { code: 'zh', name: '中文', flag: '🇨🇳' },
-  { code: 'ja', name: '日本語', flag: '🇯🇵' },
+  { code: 'th', name: 'Thai', flag: 'th' },
 ];
 
 export function AppNavbar({ isCollapsed, onToggleSidebar, isMobile = false, searchQuery, onSearchChange, className }: AppNavbarProps) {
@@ -70,7 +66,7 @@ export function AppNavbar({ isCollapsed, onToggleSidebar, isMobile = false, sear
       transition={{ duration: 0.3 }}
     >
       {/* Left Section */}
-      <div className="flex items-center gap-4 min-w-0 flex-1">
+      <div className="flex items-center gap-4 min-w-0">
         {/* Sidebar Toggle */}
         <Button
           variant="ghost"
@@ -173,12 +169,12 @@ export function AppNavbar({ isCollapsed, onToggleSidebar, isMobile = false, sear
         </DropdownMenu>
 
         {/* Notifications */}
-        <Button variant="ghost" size="sm" className="text-navbar-foreground relative">
+        {/* <Button variant="ghost" size="sm" className="text-navbar-foreground relative">
           <Bell className="h-4 w-4" />
           <span className="absolute -top-1 -right-1 h-3 w-3 bg-primary rounded-full text-[10px] text-primary-foreground flex items-center justify-center">
             3
           </span>
-        </Button>
+        </Button> */}
 
         {/* User Menu */}
         <DropdownMenu>
